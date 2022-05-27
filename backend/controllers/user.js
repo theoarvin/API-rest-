@@ -1,13 +1,22 @@
+// importation de bcrypt pour hasher le password
 const bcrypt = require('bcrypt');
-const User = require('../models/User');
+// importation de crypto-js pour chiffrer le mail
+const cryptoJs = require('crypto-js');
 
+// importation du model de la base de données 
+const User = require('../models/User');
+const jwt = require('jsonwebtoken');
+
+// signup pour enregistrer le nouvel utilisateur dans la base de données
 exports.signup = (req, res, next) => {
-  bcrypt.hash(req.body.password, 10)
+  bcrypt.hash(req.body.password, 10)// salt = 10 ( nombre de fois ou sera exécuté l'algorithme de hashage )
     .then(hash => {
+      // ce qui v a être enregistré dans mangoDB
       const user = new User({
         email: req.body.email,
         password: hash
       });
+      // envoyer le user dans la base de données 
       user.save()
         .then(() => res.status(201).json({ message: 'Utilisateur créé !' }))
         .catch(error => res.status(400).json({ error }));
@@ -15,6 +24,8 @@ exports.signup = (req, res, next) => {
     .catch(error => res.status(500).json({ error }));
 };
 
+
+// login pour s'identifier via la base de données
 exports.login = (req, res, next) => {
   User.findOne({ email: req.body.email })
     .then(user => {
@@ -28,7 +39,11 @@ exports.login = (req, res, next) => {
           }
           res.status(200).json({
             userId: user._id,
-            token: 'TOKEN'
+            token: jwt.sign(
+              { userId: user._id },
+              'RANDOM_TOKEN_SECRET',
+              { expiresIn: '24h' }
+            )
           });
         })
         .catch(error => res.status(500).json({ error }));

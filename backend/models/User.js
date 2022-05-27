@@ -6,6 +6,7 @@ const userShema = mongoose.Schema({
     password: { type: String, required: true }
 });
 
+// secruité pour ne pas enregistrer 2 fois la même adresse mail
 userShema.plugin(uniqueValidator);
 
 // exportation du modèle de données 
