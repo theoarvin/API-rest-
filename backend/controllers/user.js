@@ -1,15 +1,18 @@
 // importation de bcrypt pour hasher le password
 const bcrypt = require('bcrypt');
-// importation de crypto-js pour chiffrer le mail
-const cryptoJs = require('crypto-js');
+
+
+const dotenv = require("dotenv");
+dotenv.config();
 
 // importation du model de la base de données 
 const User = require('../models/User');
+
 const jwt = require('jsonwebtoken');
 
 // signup pour enregistrer le nouvel utilisateur dans la base de données
 exports.signup = (req, res, next) => {
-  bcrypt.hash(req.body.password, 10)// salt = 10 ( nombre de fois ou sera exécuté l'algorithme de hashage )
+  bcrypt.hash(req.body.password, parseInt(process.env.SALT))// salt = 10 ( nombre de fois ou sera exécuté l'algorithme de hashage )
     .then(hash => {
       // ce qui v a être enregistré dans mangoDB
       const user = new User({
@@ -41,7 +44,7 @@ exports.login = (req, res, next) => {
             userId: user._id,
             token: jwt.sign(
               { userId: user._id },
-              'RANDOM_TOKEN_SECRET',
+              'RANDOM_SECRET_TOKEN',
               { expiresIn: '24h' }
             )
           });

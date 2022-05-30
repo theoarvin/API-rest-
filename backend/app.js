@@ -1,10 +1,13 @@
 // importation de express
 const express = require('express');
-const bodyParser =  require('body-parser');
-// importation du fichier database pour mongoose
 const mongoose = require('./db/db');
+const dotenv = require("dotenv");
+dotenv.config();
+const path = require('path');
 
+// importation des routes
 const userRoutes = require('./routes/user');
+const sauceRoutes = require('./routes/sauce');
 
 const app = express();
 
@@ -23,7 +26,12 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
+app.use('/images', express.static(path.join(__dirname, 'images')));
+
+// route utilisateurs
 app.use('/api/auth', userRoutes)
-  
-  
+
+// route sauce
+app.use('api/sauces',sauceRoutes) 
+
 module.exports = app;
