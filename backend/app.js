@@ -7,7 +7,7 @@ const path = require('path');
 
 // importation des routes
 const userRoutes = require('./routes/user');
-const sauceRoutes = require('./routes/sauce');
+const sauceRoutes = require('./routes/sauces');
 
 const app = express();
 
@@ -29,9 +29,9 @@ app.use(express.json());
 app.use('/images', express.static(path.join(__dirname, 'images')));
 
 // route utilisateurs
-app.use('/api/auth', userRoutes)
-
+app.use('/api/auth', userRoutes);
 // route sauce
-app.use('api/sauces',sauceRoutes) 
+app.use('/api/sauces',sauceRoutes) ;
+
 
 module.exports = app;
