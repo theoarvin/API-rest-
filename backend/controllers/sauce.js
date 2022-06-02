@@ -27,11 +27,7 @@ exports.postSauce = (req,res,next) => {
   
   const sauce = new Sauce ({
     ...sauceObject,
-    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`,
-    likes: 0,
-    dislikes: 0,
-    usersLiked: [],
-    usersDisliked: []
+    imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
   });
   sauce.save()
     .then(() => res.status(201).json({ message: 'Objet enregistré !'}))
@@ -94,4 +90,57 @@ exports.deleteSauce = (req, res, next) => {
   })
   .catch((error) => res.status(500).json({error}))
   
+}
+
+exports.likeSauce = (req, res, next) => {
+ console.log(req.body.like);
+ let like = req.body.like;
+ let userId = req.body.userId;
+
+ Sauce.findOne({_id : req.params.id})
+ .then((sauce) => {
+     switch (like){
+       case -1 :
+           sauce.dislikes++ 
+           sauce.usersDisliked.push(userId);
+           console.log(sauce.usersDisliked);
+           sauce.save()
+             .then(() => res.status(201).json({ message: ' vous avez disliker cette sauce !'}))
+             .catch(error => res.status(400).json({ error }));
+       break
+
+       case 0 :
+            // si l'user a liker , on annule le like
+            if(sauce.usersLiked.includes(userId)){
+               let index = sauce.usersLiked.indexOf(userId)
+               sauce.usersLiked.splice(index, 1)
+               sauce.likes-- 
+               sauce.save()
+              .then(() => res.status(201).json({ message: ' vous avez annulé votre like !'}))
+              .catch(error => res.status(400).json({ error }));
+            // si l'user a disliker , on annule le dislike
+            }else if (sauce.usersDisliked.includes(userId)){
+              let index = sauce.usersDisliked.indexOf(userId)
+              sauce.usersDisliked.splice(index, 1)
+              sauce.dislikes-- 
+              sauce.save()
+             .then(() => res.status(201).json({ message: ' vous avez annulé votre dislike !'}))
+             .catch(error => res.status(400).json({ error }));
+            }
+       break
+
+       case 1 :
+            sauce.likes++ 
+            sauce.usersLiked.push(userId);
+            console.log(sauce.usersLiked);
+            sauce.save()
+            .then(() => res.status(201).json({ message: ' vous avez liker cette sauce !'}))
+            .catch(error => res.status(400).json({ error }));
+       break
+     }
+ })
+ .catch((error) => res.status(500).json({error}))
+ //
+ //
+ 
 }
