@@ -12,6 +12,7 @@ const jwt = require('jsonwebtoken');
 
 // signup pour enregistrer le nouvel utilisateur dans la base de données
 exports.signup = (req, res, next) => {
+
   bcrypt.hash(req.body.password, parseInt(process.env.SALT))// salt = 10 ( nombre de fois ou sera exécuté l'algorithme de hashage )
     .then(hash => {
       // ce qui v a être enregistré dans mangoDB
@@ -44,7 +45,7 @@ exports.login = (req, res, next) => {
             userId: user._id,
             token: jwt.sign(
               { userId: user._id },
-              'RANDOM_SECRET_TOKEN',
+              `${process.env.TOKEN_SECRET}`,
               { expiresIn: '24h' }
             )
           });

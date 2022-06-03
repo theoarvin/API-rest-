@@ -112,20 +112,20 @@ exports.likeSauce = (req, res, next) => {
        case 0 :
             // si l'user a liker , on annule le like
             if(sauce.usersLiked.includes(userId)){
-               let index = sauce.usersLiked.indexOf(userId)
-               sauce.usersLiked.splice(index, 1)
-               sauce.likes-- 
-               sauce.save()
-              .then(() => res.status(201).json({ message: ' vous avez annulé votre like !'}))
-              .catch(error => res.status(400).json({ error }));
+                 let index = sauce.usersLiked.indexOf(userId)
+                 sauce.usersLiked.splice(index, 1)
+                 sauce.likes-- 
+                 sauce.save()
+                .then(() => res.status(201).json({ message: ' vous avez annulé votre like !'}))
+                .catch(error => res.status(400).json({ error }));
             // si l'user a disliker , on annule le dislike
             }else if (sauce.usersDisliked.includes(userId)){
-              let index = sauce.usersDisliked.indexOf(userId)
-              sauce.usersDisliked.splice(index, 1)
-              sauce.dislikes-- 
-              sauce.save()
-             .then(() => res.status(201).json({ message: ' vous avez annulé votre dislike !'}))
-             .catch(error => res.status(400).json({ error }));
+                 let index = sauce.usersDisliked.indexOf(userId)
+                 sauce.usersDisliked.splice(index, 1)
+                 sauce.dislikes-- 
+                 sauce.save()
+                .then(() => res.status(201).json({ message: ' vous avez annulé votre dislike !'}))
+                .catch(error => res.status(400).json({ error }));
             }
        break
 
@@ -137,6 +137,9 @@ exports.likeSauce = (req, res, next) => {
             .then(() => res.status(201).json({ message: ' vous avez liker cette sauce !'}))
             .catch(error => res.status(400).json({ error }));
        break
+
+       default:
+        console.log(error);
      }
  })
  .catch((error) => res.status(500).json({error}))

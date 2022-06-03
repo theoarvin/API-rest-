@@ -4,12 +4,14 @@ const mongoose = require('./db/db');
 const dotenv = require("dotenv");
 dotenv.config();
 const path = require('path');
-
+const helmet = require('helmet');
 // importation des routes
 const userRoutes = require('./routes/user');
 const sauceRoutes = require('./routes/sauces');
 
 const app = express();
+
+app.use(helmet());
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -23,6 +25,7 @@ app.use((req, res, next) => {
   );
   next();
 });
+
 
 app.use(express.json());
 
