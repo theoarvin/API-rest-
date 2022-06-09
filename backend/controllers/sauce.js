@@ -92,9 +92,11 @@ exports.deleteSauce = (req, res, next) => {
   
 }
 
+// controller pour gérer les likes
 exports.likeSauce = (req, res, next) => {
- console.log(req.body.like);
+ // on récupère le like 
  let like = req.body.like;
+ // on récupère l'utilisateur qui a liké
  let userId = req.body.userId;
 
  Sauce.findOne({_id : req.params.id})
@@ -143,7 +145,4 @@ exports.likeSauce = (req, res, next) => {
      }
  })
  .catch((error) => res.status(500).json({error}))
- //
- //
- 
 }
