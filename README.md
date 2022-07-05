@@ -1,7 +1,7 @@
 Projet d'étude d'une api rest (Construisez une API sécurisée pour une application d'avis gastronomiques)
 
 Back-end : NODEJS
-pour lancer le projet : remplir le dossier .env via exemple.env 
+pour lancer le projet : remplir le dossier .env via .env.example 
 npm install => nodemon server 
 
 Pour tirer parti de son succès et générer davantage de buzz, l'entreprise
